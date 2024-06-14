@@ -17,7 +17,7 @@ return {
     config = function()
         local lsp_zero = require("lsp-zero")
         lsp_zero.on_attach(function(client, bufnr)
-            local opts = {buffer = bufnr, remap = false}
+            local opts = { buffer = bufnr, remap = false }
 
             vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
             vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
@@ -53,7 +53,6 @@ return {
             },
             handlers = {
                 function(server_name) -- default handler (optional)
-
                     require("lspconfig")[server_name].setup {
                         capabilities = capabilities
                     }
@@ -94,8 +93,8 @@ return {
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
             }, {
-                    { name = 'buffer' },
-                })
+                { name = 'buffer' },
+            })
         })
 
         vim.diagnostic.config({

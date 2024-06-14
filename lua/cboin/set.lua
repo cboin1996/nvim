@@ -26,7 +26,11 @@ vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
-
+-- by default have 4 space set
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+-- offer re-set of local buffer spacing
 vim.keymap.set("n", "<leader>lw", function()
         local width = tonumber(vim.fn.input("Enter line width > "))
         vim.opt.tabstop = width
