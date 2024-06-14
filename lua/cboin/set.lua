@@ -28,8 +28,8 @@ vim.opt.updatetime = 50
 vim.opt.colorcolumn = "80"
 
 vim.keymap.set("n", "<leader>lw", function()
-    local width = tonumber(vim.fn.input("Enter line width > "))
-    vim.opt.tabstop = width
-    vim.opt.softtabstop = width
-    vim.opt.shiftwidth = width
+        local width = tonumber(vim.fn.input("Enter line width > "))
+        vim.opt.tabstop = width
+        vim.opt.softtabstop = width
+        vim.opt.shiftwidth = width
 end)
