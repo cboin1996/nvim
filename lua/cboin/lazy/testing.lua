@@ -5,7 +5,8 @@ return {
         "nvim-lua/plenary.nvim",
         "antoinemadec/FixCursorHold.nvim",
         "nvim-treesitter/nvim-treesitter",
-        "nvim-neotest/neotest-python"
+        "nvim-neotest/neotest-python",
+        "nvim-neotest/neotest-go"
     },
     config = function()
         -- setup python
@@ -13,7 +14,8 @@ return {
             adapters = {
                 require("neotest-python")({
                     pytest_discover_instances = true,
-                })
+                }),
+                require("neotest-go"),
             },
         })
         local nt = require("neotest")

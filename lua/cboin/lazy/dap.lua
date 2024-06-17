@@ -90,5 +90,12 @@ return {
             local dpy = require("dap-python")
             dpy.setup("~/.virtualenvs/debugpy/bin/python")
         end
+    },
+    -- go dap
+    {
+        "leoluz/nvim-dap-go",
+        config = function()
+            require("dap-go").setup()
+        end
     }
 }
