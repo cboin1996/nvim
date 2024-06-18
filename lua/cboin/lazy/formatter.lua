@@ -3,9 +3,12 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     config = function()
         local conform = require("conform")
-
+        -- any formatters here must be installed through
+        -- mason, or externally
         conform.setup({
             formatters_by_ft = {
+                python = { "isort", "black" },
+                typescript = { "prettier" },
                 lua = { "stylua" },
                 markdown = { "markdownlint" }
             },
