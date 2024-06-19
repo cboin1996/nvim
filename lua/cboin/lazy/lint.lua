@@ -17,11 +17,11 @@ return {
         vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
             group = lint_augroup,
             callback = function()
-                lint.try_lint(nil, {ignore_errors = true})
+                lint.try_lint(nil, { ignore_errors = true })
             end
         })
         vim.keymap.set("n", "<Leader>vl", function()
-            lint.try_lint(nil, {ignore_errors = true})
-        end)
+            lint.try_lint(nil, { ignore_errors = true })
+        end, { desc = "lint file" })
     end
 }

@@ -19,6 +19,6 @@ return {
             conform.format({
                 lsp_fallback = true, async = false, timeout_ms = 500
             })
-        end)
+        end, {desc="format file"})
     end
 }

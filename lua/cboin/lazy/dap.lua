@@ -68,16 +68,16 @@ return {
 
             -- set keybinds
             -- Set breakpoints, get variable values, step into/out of functions, etc.
-            vim.keymap.set("n", "<Leader>dl", require("dap.ui.widgets").hover)
-            vim.keymap.set("n", "<Leader>dc", dap.continue)
-            vim.keymap.set("n", "<Leader>de", dap.terminate)
-            vim.keymap.set("n", "<Leader>db", dap.toggle_breakpoint)
-            vim.keymap.set("n", "<Leader>dn", dap.step_over)
-            vim.keymap.set("n", "<Leader>di", dap.step_into)
-            vim.keymap.set("n", "<Leader>do", dap.step_out)
+            vim.keymap.set("n", "<Leader>dl", require("dap.ui.widgets").hover, {desc="hover"})
+            vim.keymap.set("n", "<Leader>dc", dap.continue, {desc="continue"})
+            vim.keymap.set("n", "<Leader>de", dap.terminate, {desc="exit debug session"})
+            vim.keymap.set("n", "<Leader>db", dap.toggle_breakpoint, {desc="toggle breakpoint"})
+            vim.keymap.set("n", "<Leader>dn", dap.step_over, {desc="step over"})
+            vim.keymap.set("n", "<Leader>di", dap.step_into, {desc="step into"})
+            vim.keymap.set("n", "<Leader>do", dap.step_out, {desc="step out"})
             vim.keymap.set("n", "<Leader>dC", function()
                 dap.clear_breakpoints()
-            end)
+            end, {desc="clear breakpoints"})
         end
     },
     -- python dap
