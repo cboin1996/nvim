@@ -17,30 +17,34 @@ return {
     config = function()
         local lsp_zero = require("lsp-zero")
         lsp_zero.on_attach(function(client, bufnr)
-            local opts = { buffer = bufnr, remap = false }
-
-            vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end,
-                { buffer = bufnr, remap = false, desc = "jump to definition" })
-            vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end,
-                { buffer = bufnr, remap = false, desc = "jump to declaration" })
-            vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end,
-                { buffer = bufnr, remap = false, desc = "hover" })
-            vim.keymap.set("n", "<Leader>vws", function() vim.lsp.buf.workspace_symbol() end,
-                { buffer = bufnr, remap = false, desc = "workspace symbol" })
-            vim.keymap.set("n", "<Leader>vd", function() vim.diagnostic.open_float() end,
-                { buffer = bufnr, remap = false, desc = "view diagnostic" })
-            vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end,
-                { buffer = bufnr, remap = false, desc = "next diagnostic" })
-            vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end,
-                { buffer = bufnr, remap = false, desc = "previous diagnostic" })
-            vim.keymap.set("n", "<Leader>vca", function() vim.lsp.buf.code_action() end,
-                { buffer = bufnr, remap = false, desc = "view code action" })
-            vim.keymap.set("n", "<Leader>vrr", function() vim.lsp.buf.references() end,
-                { buffer = bufnr, remap = false, desc = "view references" })
-            vim.keymap.set("n", "<Leader>vrn", function() vim.lsp.buf.rename() end,
-                { buffer = bufnr, remap = false, desc = "refactor" })
-            vim.keymap.set("n", "<Leader>vh", function() vim.lsp.buf.signature_help() end,
-                { buffer = bufnr, remap = false, desc = "view doc" })
+            local function map(mode, l, r, opts)
+                opts = opts or {}
+                opts.buffer = bufnr
+                opts.remap = false
+                vim.keymap.set(mode, l, r, opts)
+            end
+            map("n", "gd", function() vim.lsp.buf.definition() end,
+                { desc = "jump to definition" })
+            map("n", "gD", function() vim.lsp.buf.declaration() end,
+                { desc = "jump to declaration" })
+            map("n", "K", function() vim.lsp.buf.hover() end,
+                { desc = "hover" })
+            map("n", "<Leader>vws", function() vim.lsp.buf.workspace_symbol() end,
+                { desc = "workspace symbol" })
+            map("n", "<Leader>vd", function() vim.diagnostic.open_float() end,
+                { desc = "view diagnostic" })
+            map("n", "[d", function() vim.diagnostic.goto_next() end,
+                { desc = "next diagnostic" })
+            map("n", "]d", function() vim.diagnostic.goto_prev() end,
+                { desc = "previous diagnostic" })
+            map("n", "<Leader>vca", function() vim.lsp.buf.code_action() end,
+                { desc = "view code action" })
+            map("n", "<Leader>vrr", function() vim.lsp.buf.references() end,
+                { desc = "view references" })
+            map("n", "<Leader>vrn", function() vim.lsp.buf.rename() end,
+                { desc = "refactor" })
+            map("n", "<Leader>vh", function() vim.lsp.buf.signature_help() end,
+                { desc = "view doc" })
         end)
 
         local cmp = require('cmp')

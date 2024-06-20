@@ -13,18 +13,24 @@ return {
                 if vim.bo.ft ~= "fugitive" then
                     return
                 end
-
                 local bufnr = vim.api.nvim_get_current_buf()
-                vim.keymap.set("n", "<leader>p", function()
+                local function map(mode, l, r, opts)
+                    opts = opts or {}
+                    opts.buffer = bufnr
+                    opts.remap = false
+                    vim.keymap.set(mode, l, r, opts)
+                end
+
+                map("n", "<leader>p", function()
                     vim.cmd.Git('push')
-                end, { buffer = bufnr, remap = false, desc="git push" })
+                end, { desc="git push" })
                 -- rebase always
-                vim.keymap.set("n", "<leader>P", function()
+                map("n", "<leader>P", function()
                     vim.cmd.Git('pull --rebase')
-                end, { buffer = bufnr, remap = false, desc="git pull" })
+                end, { desc="git pull" })
                 -- NOTE: It allows me to easily set the branch i am pushing and any tracking
                 -- needed if i did not set the branch up correctly
-                vim.keymap.set("n", "<leader>t", ":Git push -u origin ", { buffer = bufnr, remap = false, desc="git push (set branch)" });
+                map("n", "<leader>t", ":Git push -u origin ", { desc="git push (set branch)" });
             end,
         })
 
