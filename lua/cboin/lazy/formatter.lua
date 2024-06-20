@@ -10,7 +10,7 @@ return {
                 python = { "isort", "black" },
                 typescript = { "prettier" },
                 lua = { "stylua" },
-                markdown = { "markdownlint" }
+                markdown = { "prettier" }
             },
         })
 
