@@ -10,7 +10,11 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "jump half pgdown" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "jump half pgup" })
 vim.keymap.set("n", "n", "nzzzv", { desc = "while searching, keep cursor in middle of buffer" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "while searching, keep cursor in middle of buffer" })
-
+-- window resize
+vim.keymap.set("n", "=", [[<cmd>vertical resize +5<cr>]], {desc="make the window bigger vertically"})
+vim.keymap.set("n", "-", [[<cmd>vertical resize -5<cr>]], {desc="make the window smaller vertically"})
+vim.keymap.set("n", "+", [[<cmd>horizontal resize +2<cr>]], {desc="make the window bigger horizontally"})
+vim.keymap.set("n", "_", [[<cmd>horizontal resize -2<cr>]], {desc="make the window smaller horizontally"})
 -- greatest remap ever
 vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "paste over highlighted word, keeping ref to pasted word" })
 
