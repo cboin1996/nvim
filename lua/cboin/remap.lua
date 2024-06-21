@@ -22,9 +22,8 @@ vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "paste over highlighted word
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "yank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
-vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "delete to void register in normal or visual mode" })
-
 vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "<leader>f", "<cmd>silent !tmux neww ~/bin/tmux-sessionizer<CR>", {desc = "open tmux sessionizer"})
 
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], {desc = "replace word under cursor via sed"})
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true }, {desc="chmox current file"})
