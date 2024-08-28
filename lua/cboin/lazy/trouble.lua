@@ -13,7 +13,7 @@ return {
             end)
 
             vim.keymap.set("n", "]t", function()
-                require("trouble").previous({skip_groups = true, jump = true}, {desc="next trouble diagnostic"});
+                require("trouble").prev({skip_groups = true, jump = true}, {desc="next trouble diagnostic"});
             end)
 
         end
