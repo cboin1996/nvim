@@ -68,16 +68,23 @@ return {
 
             -- set keybinds
             -- Set breakpoints, get variable values, step into/out of functions, etc.
-            vim.keymap.set("n", "<Leader>dl", require("dap.ui.widgets").hover, {desc="hover"})
-            vim.keymap.set("n", "<Leader>dc", dap.continue, {desc="continue"})
-            vim.keymap.set("n", "<Leader>de", dap.terminate, {desc="exit debug session"})
-            vim.keymap.set("n", "<Leader>db", dap.toggle_breakpoint, {desc="toggle breakpoint"})
-            vim.keymap.set("n", "<Leader>dn", dap.step_over, {desc="step over"})
-            vim.keymap.set("n", "<Leader>di", dap.step_into, {desc="step into"})
-            vim.keymap.set("n", "<Leader>do", dap.step_out, {desc="step out"})
+            vim.keymap.set("n", "<Leader>dl", require("dap.ui.widgets").hover, { desc = "hover" })
+            vim.keymap.set("n", "<Leader>dc", dap.continue, { desc = "continue" })
+            vim.keymap.set("n", "<Leader>de", dap.terminate, { desc = "exit debug session" })
+            vim.keymap.set("n", "<Leader>db", dap.toggle_breakpoint, { desc = "toggle breakpoint" })
+            vim.keymap.set("n", "<Leader>dn", dap.step_over, { desc = "step over" })
+            vim.keymap.set("n", "<Leader>di", dap.step_into, { desc = "step into" })
+            vim.keymap.set("n", "<Leader>do", dap.step_out, { desc = "step out" })
+            vim.keymap.set("n", "<Leader>dr", dap.restart, { desc = "restart debug session" })
             vim.keymap.set("n", "<Leader>dC", function()
                 dap.clear_breakpoints()
-            end, {desc="clear breakpoints"})
+            end, { desc = "clear breakpoints" })
+            -- javascript : https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#javascript-firefox
+            dap.adapters.firefox = {
+                type = 'executable',
+                command = 'node',
+                args = { os.getenv('HOME') .. '/vscode-firefox-debug/dist/adapter.bundle.js' },
+            }
         end
     },
     -- python dap
@@ -97,5 +104,5 @@ return {
         config = function()
             require("dap-go").setup()
         end
-    }
+    },
 }

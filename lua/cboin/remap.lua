@@ -10,6 +10,8 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "jump half pgdown" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "jump half pgup" })
 vim.keymap.set("n", "n", "nzzzv", { desc = "while searching, keep cursor in middle of buffer" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "while searching, keep cursor in middle of buffer" })
+vim.keymap.set("n", "<leader>wds", ":windo diffthis<cr>", { desc = "turn off diff view on current buffer" })
+vim.keymap.set("n", "<leader>wde", ":windo diffo<cr>", { desc = "turn off diff view on current buffer" })
 -- window resize
 vim.keymap.set("n", "=", [[<cmd>vertical resize +5<cr>]], {desc="make the window bigger vertically"})
 vim.keymap.set("n", "-", [[<cmd>vertical resize -5<cr>]], {desc="make the window smaller vertically"})
