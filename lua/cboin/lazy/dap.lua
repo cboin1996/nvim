@@ -1,4 +1,62 @@
 return {
+    -- plain dap
+    {
+        "mfussenegger/nvim-dap",
+        config = function()
+            -- javascript firefox: https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#javascript-firefox
+            local dap = require("dap")
+            dap.adapters.firefox = {
+                type = 'executable',
+                command = 'node',
+                args = { os.getenv("HOME") .. "/debug-adapters/vscode-firefox-debug/dist/adapter.bundle.js" },
+            }
+            -- javascript node: https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#vscode-js-debug
+            dap.adapters["pwa-node"] = {
+                type = "server",
+                host = "localhost",
+                port = "${port}",
+                executable = {
+                    command = "node",
+                    -- 💀 Make sure to update this path to point to your installation
+                    args = { os.getenv("HOME") .. "/debug-adapters/js-debug/src/dapDebugServer.js", "${port}" },
+                }
+            }
+            dap.configurations.javascript = {
+                {
+                    type = "pwa-node",
+                    request = "launch",
+                    name = "Launch file",
+                    program = "${file}",
+                    cwd = vim.fn.getcwd()
+                },
+                {
+                    type = "pwa-node",
+                    request = "attach",
+                    name = "attach",
+                    processId = function() require("dap.utils").pick_process({ filter = "node" }) end,
+                    cwd = vim.fn.getcwd()
+                }
+            }
+        end
+    },
+    -- python dap
+    {
+        "mfussenegger/nvim-dap-python",
+        dependencies = {
+            "nvim-neotest/nvim-nio",
+        },
+        config = function()
+            local dpy = require("dap-python")
+            dpy.setup("~/.virtualenvs/debugpy/bin/python")
+        end
+    },
+    -- go dap
+    {
+        "leoluz/nvim-dap-go",
+        config = function()
+            require("dap-go").setup()
+        end
+    },
     -- dap and dap ui
     {
         "rcarriga/nvim-dap-ui",
@@ -79,30 +137,6 @@ return {
             vim.keymap.set("n", "<Leader>dC", function()
                 dap.clear_breakpoints()
             end, { desc = "clear breakpoints" })
-            -- javascript : https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#javascript-firefox
-            dap.adapters.firefox = {
-                type = 'executable',
-                command = 'node',
-                args = { os.getenv('HOME') .. '/vscode-firefox-debug/dist/adapter.bundle.js' },
-            }
-        end
-    },
-    -- python dap
-    {
-        "mfussenegger/nvim-dap-python",
-        dependencies = {
-            "nvim-neotest/nvim-nio",
-        },
-        config = function()
-            local dpy = require("dap-python")
-            dpy.setup("~/.virtualenvs/debugpy/bin/python")
-        end
-    },
-    -- go dap
-    {
-        "leoluz/nvim-dap-go",
-        config = function()
-            require("dap-go").setup()
         end
     },
 }

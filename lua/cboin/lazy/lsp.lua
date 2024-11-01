@@ -62,10 +62,10 @@ return {
                 "lua_ls",        -- lua
                 "rust_analyzer", -- rust
                 "gopls",         -- go
-                "tsserver",      -- typescript
+                "ts_ls",      -- typescript
                 "pyright",       -- python
                 "tflint",        -- terraform
-                "marksman"       -- markdown
+                "marksman",      -- markdown
             },
             handlers = {
                 function(server_name) -- default handler (optional)

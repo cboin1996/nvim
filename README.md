@@ -13,9 +13,12 @@
 
 ### Debugging
 
+Install any plugins into folder `~/debug-adapters`.
+
 - [debugpy (dap python)](https://github.com/mfussenegger/nvim-dap-python?tab=readme-ov-file#debugpy)
 - [delve](https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go-using-delve-directly)
 - [vscode firefox](https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#javascript-firefox)
+- [vscode js](https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#javascript-firefox)
 
 ### Icons
 

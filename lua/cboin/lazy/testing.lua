@@ -14,6 +14,7 @@ return {
             adapters = {
                 require("neotest-python")({
                     pytest_discover_instances = true,
+                    dap = { justMyCode = false },
                 }),
                 require("neotest-go"),
             },
@@ -24,7 +25,8 @@ return {
         vim.keymap.set("n", "<Leader>nR", function() nt.run.run(vim.fn.expand("%")) end, { desc = "run test at cursor" })
         vim.keymap.set("n", "<Leader>ns", function() nt.run.stop() end, { desc = "stop test" })
         vim.keymap.set("n", "<Leader>no", function() nt.output.open() end, { desc = "open test result" })
-        vim.keymap.set("n", "<Leader>nO", function() nt.output.open({ enter = true }) end, { desc = "open (and enter buffer) test result" })
+        vim.keymap.set("n", "<Leader>nO", function() nt.output.open({ enter = true }) end,
+            { desc = "open (and enter buffer) test result" })
         vim.keymap.set("n", "<Leader>nt", function() nt.summary.toggle() end, { desc = "toggle test summary" })
     end
 }
