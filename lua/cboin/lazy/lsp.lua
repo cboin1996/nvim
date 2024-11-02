@@ -3,6 +3,7 @@ return {
     dependencies = {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
@@ -62,7 +63,7 @@ return {
                 "lua_ls",        -- lua
                 "rust_analyzer", -- rust
                 "gopls",         -- go
-                "ts_ls",      -- typescript
+                "ts_ls",         -- typescript
                 "pyright",       -- python
                 "tflint",        -- terraform
                 "marksman",      -- markdown
@@ -90,7 +91,15 @@ return {
                 end,
             }
         })
-
+        require("mason-tool-installer").setup({
+            ensure_installed = {
+                "prettier",
+                "stylua",
+                "black",
+                "isort",
+                "pylint",
+            }
+        })
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
         cmp.setup({
