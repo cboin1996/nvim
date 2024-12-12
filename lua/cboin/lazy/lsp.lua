@@ -67,6 +67,7 @@ return {
                 "pyright",       -- python
                 "tflint",        -- terraform
                 "marksman",      -- markdown
+                "texlab",        -- latex
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -98,6 +99,7 @@ return {
                 "black",
                 "isort",
                 "pylint",
+                "latexindent", -- latex
             }
         })
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
