@@ -6,7 +6,8 @@ return {
         "antoinemadec/FixCursorHold.nvim",
         "nvim-treesitter/nvim-treesitter",
         "nvim-neotest/neotest-python",
-        "nvim-neotest/neotest-go"
+        "nvim-neotest/neotest-go",
+        "nvim-neotest/neotest-jest"
     },
     config = function()
         -- setup python
@@ -14,9 +15,17 @@ return {
             adapters = {
                 require("neotest-python")({
                     pytest_discover_instances = true,
-                    dap = { justMyCode = false },
+                    dap = { justMyCode = true },
                 }),
                 require("neotest-go"),
+                require('neotest-jest')({
+                    jestCommand = "npm test --",
+                    jestConfigFile = "custom.jest.config.ts",
+                    env = { CI = true },
+                    cwd = function(path)
+                        return vim.fn.getcwd()
+                    end,
+                })
             },
         })
         local nt = require("neotest")
