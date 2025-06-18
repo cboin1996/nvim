@@ -68,6 +68,7 @@ return {
                 "tflint",        -- terraform
                 "marksman",      -- markdown
                 "texlab",        -- latex
+                "tailwindcss" -- tailwind
             },
             handlers = {
                 function(server_name) -- default handler (optional)
