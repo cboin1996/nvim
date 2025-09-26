@@ -20,6 +20,8 @@ Install any plugins into folder `~/debug-adapters`.
 - [vscode firefox](https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#javascript-firefox)
 - [vscode js](https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#javascript-firefox)
 
+At this time, due to the complexity of setup dap for java is not configured.
+
 ### Icons
 
 - [font-hack-nerd-font (icons)](https://www.nerdfonts.com/)
