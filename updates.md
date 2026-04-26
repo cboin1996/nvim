@@ -81,12 +81,24 @@ The `require('lspconfig')` "framework" is deprecated
 Decoration provider "start" (ns=nvim.treesitter.highlighter):
 attempt to call method 'range' (a nil value)
 ```
+Often triggered on a specific filetype (e.g. opening a `.md` file).
 
-**Cause:** Neovim updated (via pacman/brew) and the new treesitter runtime ABI doesn't match the compiled parsers.
+**Cause:** Neovim updated and the new treesitter ABI doesn't match the compiled parser `.so` files. `TSUpdate` checks commit hashes only — it won't recompile a parser that's already at the right commit but built against an old ABI.
 
-**Fix:**
+**Fix — try TSUpdate first:**
 ```bash
 nvim --headless -c "TSUpdate" -c "qa"
+```
+
+**If the error persists on a specific filetype, force-reinstall that parser:**
+```bash
+# example: markdown
+nvim --headless -c "TSInstall! markdown markdown_inline" -c "qa"
+```
+
+**If errors are widespread after a major neovim version bump (e.g. 0.11 → 0.12), reinstall all parsers:**
+```bash
+nvim --headless -c "TSUpdateSync" -c "qa"
 ```
 
 ---
