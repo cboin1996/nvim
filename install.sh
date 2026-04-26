@@ -105,14 +105,13 @@ fi
 # js-debug (pwa-node) — JS/TS node DAP
 step "Installing js-debug"
 if [[ ! -d ~/debug-adapters/js-debug ]]; then
-    git clone --depth=1 \
-        https://github.com/microsoft/vscode-js-debug \
-        ~/debug-adapters/js-debug
-    pushd ~/debug-adapters/js-debug > /dev/null
-    npm install --legacy-peer-deps --silent
-    npx gulp vsDebugServerBundle 2>/dev/null
-    mv dist out
-    popd > /dev/null
+    JSDEBUG_VERSION=$(curl -fsSL https://api.github.com/repos/microsoft/vscode-js-debug/releases/latest \
+        | python3 -c "import json,sys; print(json.load(sys.stdin)['tag_name'])")
+    mkdir -p ~/debug-adapters/js-debug
+    curl -fsSL \
+        "https://github.com/microsoft/vscode-js-debug/releases/download/${JSDEBUG_VERSION}/js-debug-dap-${JSDEBUG_VERSION}.tar.gz" \
+        -o /tmp/js-debug.tar.gz
+    tar -xzf /tmp/js-debug.tar.gz -C ~/debug-adapters/js-debug
     log "js-debug installed"
 else
     log "js-debug already present, skipping"

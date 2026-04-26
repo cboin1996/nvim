@@ -1,6 +1,7 @@
 [config]
-standard_library = "lua51+vim"
+standard_library = "lua51"
 
 [lints]
 mixed_table = "allow"
 unused_variable = "allow"
+undefined_variable = "allow"
