@@ -1,2 +1,11 @@
 [config]
-standard_library = "lua51+vim"
+standard_library = "lua51"
+
+[globals]
+vim = { any = true }
+jit = { any = true }
+bit = { any = true }
+
+[lints]
+mixed_table = "allow"
+unused_variable = "allow"

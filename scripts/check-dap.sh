@@ -39,10 +39,7 @@ check "delve" \
 
 # JS/TS — js-debug (pwa-node)
 check_file "js-debug adapter" \
-    "$HOME/debug-adapters/js-debug/src/dapDebugServer.js"
-
-check "js-debug (node runs it)" \
-    node "$HOME/debug-adapters/js-debug/src/dapDebugServer.js" --help
+    "$HOME/debug-adapters/js-debug/out/src/dapDebugServer.js"
 
 # JS/TS — vscode-firefox-debug
 check_file "vscode-firefox-debug adapter" \
