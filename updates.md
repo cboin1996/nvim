@@ -116,6 +116,26 @@ Falls back to vim regex highlighting. Remove once neovim patches the highlighter
 
 ---
 
+### debugpy venv broken after system Python upgrade
+
+**Symptom:**
+```
+ModuleNotFoundError: No module named 'pip'
+# or
+ModuleNotFoundError: No module named 'debugpy'
+```
+
+**Cause:** Arch and macOS update Python in place. The venv's `pip` and installed packages point to the old Python version and stop working.
+
+**Fix:** Recreate the venv:
+```bash
+rm -rf ~/.virtualenvs/debugpy
+python3 -m venv ~/.virtualenvs/debugpy
+~/.virtualenvs/debugpy/bin/pip install debugpy
+```
+
+---
+
 ### Lazy UI shows conflicts after headless update
 
 **Symptom:** Opening Lazy after a headless `Lazy update` shows conflicts or dirty state.
