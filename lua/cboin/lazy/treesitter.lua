@@ -24,10 +24,11 @@ return {
                 -- `false` will disable the whole extension
                 enable = true,
 
-                -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-                -- Set this to `true` if you depend on "syntax" being enabled (like for indentation).
-                -- Using this option may slow down your editor, and you may see some duplicate highlights.
-                -- Instead of true it can also be a list of languages
+                -- markdown treesitter highlight triggers a nil-node crash in nvim 0.12
+                -- via the nvim-lint → diagnostic.set → redraw → highlighter chain.
+                -- disable until upstream fixes it; regex highlighting covers markdown fine.
+                disable = { "markdown", "markdown_inline" },
+
                 additional_vim_regex_highlighting = { "markdown" },
             },
         })
@@ -42,5 +43,12 @@ return {
         }
 
         vim.treesitter.language.register("templ", "templ")
+
+        -- markdown treesitter crashes in nvim 0.12 (nil node in highlighter via nvim-lint).
+        -- stop treesitter entirely for markdown until upstream fixes it.
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "markdown" },
+            callback = function() vim.treesitter.stop() end,
+        })
     end
 }

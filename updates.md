@@ -101,6 +101,19 @@ nvim --headless -c "TSInstall! markdown markdown_inline" -c "qa"
 nvim --headless -c "TSUpdateSync" -c "qa"
 ```
 
+**If the error persists after reinstalling (confirmed on nvim 0.12 + markdown):**
+
+The crash can be triggered by nvim-lint publishing diagnostics → `vim.diagnostic.set` → redraw → treesitter highlighter hitting a nil node. This is a neovim bug, not a parser issue. Reinstalling the parser won't help.
+
+Workaround: stop treesitter entirely for the affected filetype. In `lua/cboin/lazy/treesitter.lua`:
+```lua
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "markdown" },
+    callback = function() vim.treesitter.stop() end,
+})
+```
+Falls back to vim regex highlighting. Remove once neovim patches the highlighter.
+
 ---
 
 ### Lazy UI shows conflicts after headless update
