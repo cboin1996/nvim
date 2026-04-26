@@ -18,7 +18,7 @@ return {
 				executable = {
 					command = "node",
 					-- 💀 Make sure to update this path to point to your installation
-					args = { os.getenv("HOME") .. "/debug-adapters/js-debug/src/dapDebugServer.js", "${port}" },
+					args = { os.getenv("HOME") .. "/debug-adapters/js-debug/out/src/dapDebugServer.js", "${port}" },
 				},
 			}
 			dap.configurations.javascript = {
