@@ -1,24 +1,47 @@
 .PHONY: all lint boot check-dap check-lsp dev-bootstrap
 
-# Run everything CI runs
 all: lint boot check-dap
 
-# Fast lua lint via selene
 lint:
-	@scripts/lint.sh
+	@command -v selene >/dev/null 2>&1 || { echo "selene not found — run: make dev-bootstrap"; exit 1; }
+	@selene --config selene.toml lua/
+	@echo "PASS: lint clean"
 
-# Headless neovim boot — validates config loads cleanly
 boot:
-	@scripts/boot-test.sh
+	@echo "Running neovim headless boot test..."
+	@OUTPUT=$$(nvim --headless -c "qa" 2>&1 || true); \
+	FILTERED=$$(echo "$$OUTPUT" | grep -v \
+	    -e "vim.tbl_flatten is deprecated" \
+	    -e 'Run ":checkhealth vim.deprecated"' \
+	    -e "^[[:space:]]*$$" \
+	    || true); \
+	if [ -n "$$FILTERED" ]; then \
+	    echo "FAIL: Unexpected output during boot:"; \
+	    echo "$$FILTERED"; \
+	    exit 1; \
+	fi; \
+	echo "PASS: neovim booted cleanly"
 
-# Validate debug adapter binaries exist and respond
 check-dap:
 	@scripts/check-dap.sh
 
-# Validate mason-installed LSP/formatter binaries (local only, requires first nvim boot)
 check-lsp:
 	@scripts/check-lsp.sh
 
-# Install local dev tools (selene)
 dev-bootstrap:
-	@scripts/bootstrap-dev.sh
+	@OS=$$(uname -s); \
+	if command -v selene >/dev/null 2>&1; then \
+	    echo "selene already installed ($$(selene --version))"; \
+	elif [ "$$OS" = "Linux" ]; then \
+	    mkdir -p "$$HOME/.local/bin"; \
+	    curl -fsSL "https://github.com/Kampfkarren/selene/releases/latest/download/selene-linux.zip" \
+	        -o /tmp/selene.zip; \
+	    unzip -o /tmp/selene.zip selene -d "$$HOME/.local/bin"; \
+	    chmod +x "$$HOME/.local/bin/selene"; \
+	    echo "==> selene installed"; \
+	elif [ "$$OS" = "Darwin" ]; then \
+	    brew install selene; \
+	else \
+	    echo "Unsupported OS. Install selene manually: https://github.com/Kampfkarren/selene"; \
+	    exit 1; \
+	fi

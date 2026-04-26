@@ -38,7 +38,7 @@ jobs:
         run: nvim --headless -c "Lazy sync" -c "qa" 2>&1 || true
 
       - name: Boot test
-        run: scripts/boot-test.sh
+        run: make boot
 
   check-dap:
     name: DAP adapters
@@ -96,4 +96,4 @@ jobs:
           fi
 
       - name: Check DAP adapters
-        run: scripts/check-dap.sh
+        run: make check-dap
