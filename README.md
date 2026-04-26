@@ -34,9 +34,11 @@ Supports **Arch Linux**, **Ubuntu/Debian**, and **macOS**.
 
 - **Nerd Font** — install [Hack Nerd Font](https://www.nerdfonts.com/) and set it in your terminal
 - **Go PATH** — ensure `$(go env GOPATH)/bin` is in your `$PATH` for delve:
+
   ```bash
   export PATH="$PATH:$(go env GOPATH)/bin"
   ```
+
 - **LaTeX** — install a TeX distribution for texlab/latexindent:
   - Arch: `sudo pacman -S texlive-most perl`
   - Ubuntu: `sudo apt install texlive texlive-latex-extra perl`
@@ -46,7 +48,7 @@ Supports **Arch Linux**, **Ubuntu/Debian**, and **macOS**.
 
 ## Structure
 
-```
+```text
 init.lua                    entrypoint — loads lua/cboin
 lua/cboin/
   init.lua                  loads remap, set, lazy_init
@@ -136,6 +138,7 @@ Async linter runner. Triggers linters (pylint, markdownlint, selene) on `BufWrit
 ### Debugging — [nvim-dap](https://github.com/mfussenegger/nvim-dap) + adapters + [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui)
 
 `nvim-dap` implements the Debug Adapter Protocol (DAP) — the same protocol VS Code uses. Language-specific adapters bridge neovim and the actual debugger process. `nvim-dap-ui` provides the VS Code-style panels (variables, watch, call stack, breakpoints). Adapters:
+
 - **debugpy** — Python, installed in `~/.virtualenvs/debugpy`
 - **delve** — Go, installed via `go install`
 - **js-debug** — Node.js, installed from GitHub release tarball
@@ -144,6 +147,7 @@ Async linter runner. Triggers linters (pylint, markdownlint, selene) on `BufWrit
 ### Testing — [neotest](https://github.com/nvim-neotest/neotest) + adapters
 
 Test runner framework that integrates with the existing DAP setup for debugging tests. Provides a summary panel and inline pass/fail indicators. Adapters:
+
 - **neotest-python** — pytest
 - **neotest-go** — go test
 - **neotest-jest** — Jest (TypeScript/JavaScript)
@@ -185,6 +189,7 @@ LSP servers and formatters are auto-installed by mason on first launch. Exceptio
 ## Adding a New Language
 
 1. **LSP** — add the server name to `ensure_installed` in `lua/cboin/lazy/lsp.lua`:
+
    ```lua
    require("mason-lspconfig").setup({
        ensure_installed = {
@@ -192,9 +197,11 @@ LSP servers and formatters are auto-installed by mason on first launch. Exceptio
        },
    })
    ```
+
    Find the correct server name at [mason-lspconfig server list](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers).
 
 2. **Formatter** — add to `mason-tool-installer` in `lsp.lua` and configure in `lua/cboin/lazy/formatter.lua`:
+
    ```lua
    -- lsp.lua
    require("mason-tool-installer").setup({
@@ -206,6 +213,7 @@ LSP servers and formatters are auto-installed by mason on first launch. Exceptio
    ```
 
 3. **Linter** — add to `mason-tool-installer` in `lsp.lua` and configure in `lua/cboin/lazy/lint.lua`:
+
    ```lua
    -- lsp.lua
    require("mason-tool-installer").setup({
@@ -217,6 +225,7 @@ LSP servers and formatters are auto-installed by mason on first launch. Exceptio
    ```
 
 4. **Treesitter** — add the parser name to `ensure_installed` in `lua/cboin/lazy/treesitter.lua`:
+
    ```lua
    ensure_installed = { "your_language" },
    ```

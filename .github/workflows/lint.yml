@@ -21,5 +21,8 @@ jobs:
           chmod +x ~/.local/bin/selene
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
+      - name: Install markdownlint
+        run: npm install -g markdownlint-cli
+
       - name: Lint
         run: make lint

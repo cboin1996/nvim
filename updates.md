@@ -41,11 +41,14 @@ git commit -m "chore: update lazy-lock.json"
 ### LuaSnip fails to update (submodule error)
 
 **Symptom:**
-```
+
+```text
 You have local changes in .../LuaSnip: deps/jsregexp
 ```
+
 or
-```
+
+```text
 fatal: ../../.git/modules/deps/jsregexp006 is not a Git repository
 fatal: cannot restore the submodule index
 ```
@@ -53,6 +56,7 @@ fatal: cannot restore the submodule index
 **Cause:** LuaSnip uses `jsregexp` as a git submodule. A previous build or clean step can leave the submodule in a corrupted state that blocks updates.
 
 **Fix:** Wipe and reinstall:
+
 ```bash
 rm -rf ~/.local/share/nvim/lazy/LuaSnip
 nvim --headless -c "Lazy install" -c "qa"
@@ -63,7 +67,8 @@ nvim --headless -c "Lazy install" -c "qa"
 ### Lazy update fails on startup with lspconfig error
 
 **Symptom:** `Lazy update` errors immediately with something like:
-```
+
+```text
 The `require('lspconfig')` "framework" is deprecated
 ...tailwind-tools/lua/tailwind-tools/lsp.lua
 ```
@@ -77,26 +82,31 @@ The `require('lspconfig')` "framework" is deprecated
 ### Treesitter highlighter crash after neovim update
 
 **Symptom:**
-```
+
+```text
 Decoration provider "start" (ns=nvim.treesitter.highlighter):
 attempt to call method 'range' (a nil value)
 ```
+
 Often triggered on a specific filetype (e.g. opening a `.md` file).
 
 **Cause:** Neovim updated and the new treesitter ABI doesn't match the compiled parser `.so` files. `TSUpdate` checks commit hashes only — it won't recompile a parser that's already at the right commit but built against an old ABI.
 
 **Fix — try TSUpdate first:**
+
 ```bash
 nvim --headless -c "TSUpdate" -c "qa"
 ```
 
 **If the error persists on a specific filetype, force-reinstall that parser:**
+
 ```bash
 # example: markdown
 nvim --headless -c "TSInstall! markdown markdown_inline" -c "qa"
 ```
 
 **If errors are widespread after a major neovim version bump (e.g. 0.11 → 0.12), reinstall all parsers:**
+
 ```bash
 nvim --headless -c "TSUpdateSync" -c "qa"
 ```
@@ -106,12 +116,14 @@ nvim --headless -c "TSUpdateSync" -c "qa"
 The crash can be triggered by nvim-lint publishing diagnostics → `vim.diagnostic.set` → redraw → treesitter highlighter hitting a nil node. This is a neovim bug, not a parser issue. Reinstalling the parser won't help.
 
 Workaround: stop treesitter entirely for the affected filetype. In `lua/cboin/lazy/treesitter.lua`:
+
 ```lua
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "markdown" },
     callback = function() vim.treesitter.stop() end,
 })
 ```
+
 Falls back to vim regex highlighting. Remove once neovim patches the highlighter.
 
 ---
@@ -119,7 +131,8 @@ Falls back to vim regex highlighting. Remove once neovim patches the highlighter
 ### debugpy venv broken after system Python upgrade
 
 **Symptom:**
-```
+
+```text
 ModuleNotFoundError: No module named 'pip'
 # or
 ModuleNotFoundError: No module named 'debugpy'
@@ -128,6 +141,7 @@ ModuleNotFoundError: No module named 'debugpy'
 **Cause:** Arch and macOS update Python in place. The venv's `pip` and installed packages point to the old Python version and stop working.
 
 **Fix:** Recreate the venv:
+
 ```bash
 rm -rf ~/.virtualenvs/debugpy
 python3 -m venv ~/.virtualenvs/debugpy

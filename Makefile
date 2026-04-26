@@ -4,7 +4,9 @@ all: lint boot check-dap
 
 lint:
 	@command -v selene >/dev/null 2>&1 || { echo "selene not found — run: make dev-bootstrap"; exit 1; }
+	@command -v markdownlint >/dev/null 2>&1 || { echo "markdownlint not found — run: npm install -g markdownlint-cli"; exit 1; }
 	@selene --config selene.toml lua/
+	@markdownlint README.md updates.md CHANGELOG.md
 	@echo "PASS: lint clean"
 
 boot:
