@@ -8,10 +8,10 @@ check() {
     local name="$1"; shift
     if "$@" &>/dev/null; then
         echo "  PASS: $name"
-        ((PASS++))
+        PASS=$((PASS + 1))
     else
         echo "  FAIL: $name"
-        ((FAIL++))
+        FAIL=$((FAIL + 1))
     fi
 }
 
@@ -20,10 +20,10 @@ check_file() {
     local path="$2"
     if [[ -f "$path" ]]; then
         echo "  PASS: $name ($path)"
-        ((PASS++))
+        PASS=$((PASS + 1))
     else
         echo "  FAIL: $name — not found at $path"
-        ((FAIL++))
+        FAIL=$((FAIL + 1))
     fi
 }
 

@@ -13,6 +13,9 @@ boot:
 	FILTERED=$$(echo "$$OUTPUT" | grep -v \
 	    -e "vim.tbl_flatten is deprecated" \
 	    -e 'Run ":checkhealth vim.deprecated"' \
+	    -e "nvim-lspconfig support for Nvim" \
+	    -e "Feature will be removed in nvim-lspconfig" \
+	    -e "^\[" \
 	    -e "^[[:space:]]*$$" \
 	    || true); \
 	if [ -n "$$FILTERED" ]; then \

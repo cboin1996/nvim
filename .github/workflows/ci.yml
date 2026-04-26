@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  NVIM_VERSION: v0.10.4
+  NVIM_VERSION: v0.11.2
 
 jobs:
   boot:
@@ -33,6 +33,9 @@ jobs:
           path: ~/.local/share/nvim/lazy
           key: lazy-${{ hashFiles('lazy-lock.json') }}
           restore-keys: lazy-
+
+      - name: Install luarocks
+        run: sudo apt-get install -y luarocks
 
       - name: Bootstrap plugins
         run: nvim --headless -c "Lazy sync" -c "qa" 2>&1 || true
