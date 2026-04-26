@@ -88,7 +88,7 @@ jobs:
           if [[ ! -d ~/debug-adapters/js-debug ]]; then
             git clone --depth=1 https://github.com/microsoft/vscode-js-debug \
               ~/debug-adapters/js-debug
-            cd ~/debug-adapters/js-debug && npm install --silent && npm run compile --silent
+            cd ~/debug-adapters/js-debug && npm install --legacy-peer-deps --silent && npx gulp vsDebugServerBundle 2>/dev/null && mv dist out
           fi
 
           # vscode-firefox-debug

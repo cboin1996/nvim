@@ -109,8 +109,9 @@ if [[ ! -d ~/debug-adapters/js-debug ]]; then
         https://github.com/microsoft/vscode-js-debug \
         ~/debug-adapters/js-debug
     pushd ~/debug-adapters/js-debug > /dev/null
-    npm install --silent
-    npm run compile --silent
+    npm install --legacy-peer-deps --silent
+    npx gulp vsDebugServerBundle 2>/dev/null
+    mv dist out
     popd > /dev/null
     log "js-debug installed"
 else
