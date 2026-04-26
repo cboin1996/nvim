@@ -1,0 +1,107 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  NVIM_VERSION: v0.11.2
+
+jobs:
+  boot:
+    name: headless boot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install neovim ${{ env.NVIM_VERSION }}
+        run: |
+          curl -fsSL \
+            "https://github.com/neovim/neovim/releases/download/$NVIM_VERSION/nvim-linux-x86_64.tar.gz" \
+            -o /tmp/nvim.tar.gz
+          tar -C /tmp -xzf /tmp/nvim.tar.gz
+          echo "/tmp/nvim-linux-x86_64/bin" >> "$GITHUB_PATH"
+
+      # Point neovim at the checked-out config
+      - name: Set XDG_CONFIG_HOME
+        run: echo "XDG_CONFIG_HOME=$(dirname $GITHUB_WORKSPACE)" >> "$GITHUB_ENV"
+
+      - name: Cache lazy.nvim plugins
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/nvim/lazy
+          key: lazy-${{ hashFiles('lazy-lock.json') }}
+          restore-keys: lazy-
+
+      - name: Install luarocks
+        run: sudo apt-get install -y luarocks
+
+      - name: Bootstrap plugins
+        run: nvim --headless -c "Lazy sync" -c "qa" 2>&1 || true
+
+      - name: Boot test
+        run: make boot
+
+  check-dap:
+    name: DAP adapters
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Cache debug adapters
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/debug-adapters
+            ~/.virtualenvs/debugpy
+          key: dap-${{ hashFiles('install.sh') }}
+
+      - name: Install debug adapters
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # debugpy
+          if [[ ! -d ~/.virtualenvs/debugpy ]]; then
+            python -m venv ~/.virtualenvs/debugpy
+            ~/.virtualenvs/debugpy/bin/pip install --quiet debugpy
+          fi
+
+          # delve
+          go install github.com/go-delve/delve/cmd/dlv@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+          # js-debug — download release tarball (same as mason)
+          if [[ ! -f ~/debug-adapters/js-debug/src/dapDebugServer.js ]]; then
+            JSDEBUG_VERSION=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/microsoft/vscode-js-debug/releases/latest \
+              | python3 -c "import json,sys; print(json.load(sys.stdin)['tag_name'])")
+            mkdir -p ~/debug-adapters
+            curl -fsSL "https://github.com/microsoft/vscode-js-debug/releases/download/${JSDEBUG_VERSION}/js-debug-dap-${JSDEBUG_VERSION}.tar.gz" \
+              -o /tmp/js-debug.tar.gz
+            tar -xzf /tmp/js-debug.tar.gz -C ~/debug-adapters
+          fi
+
+          # vscode-firefox-debug
+          if [[ ! -d ~/debug-adapters/vscode-firefox-debug ]]; then
+            git clone --depth=1 https://github.com/firefox-devtools/vscode-firefox-debug.git \
+              ~/debug-adapters/vscode-firefox-debug
+            cd ~/debug-adapters/vscode-firefox-debug && npm install --silent && npm run build --silent
+          fi
+
+      - name: Check DAP adapters
+        run: make check-dap
