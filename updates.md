@@ -2,7 +2,9 @@
 
 ## When to update plugins
 
-Whenever you update system packages, also update neovim plugins. Neovim itself is managed by the system package manager, and plugin updates often track neovim API changes — letting them drift causes breakage.
+Whenever you update system packages, also update neovim plugins. Neovim itself
+is managed by the system package manager, and plugin updates often track neovim
+API changes — letting them drift causes breakage.
 
 ```bash
 # Arch
@@ -32,7 +34,9 @@ git add lazy-lock.json
 git commit -m "chore: update lazy-lock.json"
 ```
 
-`lazy-lock.json` pins every plugin to a specific commit. Committing it after updates means any other machine can run `:Lazy restore` to get the exact same plugin versions.
+`lazy-lock.json` pins every plugin to a specific commit. Committing it after
+updates means any other machine can run `:Lazy restore` to get the exact same
+plugin versions.
 
 ---
 
@@ -53,7 +57,8 @@ fatal: ../../.git/modules/deps/jsregexp006 is not a Git repository
 fatal: cannot restore the submodule index
 ```
 
-**Cause:** LuaSnip uses `jsregexp` as a git submodule. A previous build or clean step can leave the submodule in a corrupted state that blocks updates.
+**Cause:** LuaSnip uses `jsregexp` as a git submodule. A previous build or clean
+step can leave the submodule in a corrupted state that blocks updates.
 
 **Fix:** Wipe and reinstall:
 
@@ -73,9 +78,13 @@ The `require('lspconfig')` "framework" is deprecated
 ...tailwind-tools/lua/tailwind-tools/lsp.lua
 ```
 
-**Cause:** A plugin is calling the deprecated nvim-lspconfig v3 API and crashing startup before Lazy can run. `tailwind-tools` was the culprit and has been removed, but any plugin that internally calls `require('lspconfig')` will trigger this on lspconfig v3+.
+**Cause:** A plugin is calling the deprecated nvim-lspconfig v3 API and crashing
+startup before Lazy can run. `tailwind-tools` was the culprit and has been
+removed, but any plugin that internally calls `require('lspconfig')` will
+trigger this on lspconfig v3+.
 
-**Fix:** Identify which plugin is in the stack trace, remove or disable it in `lua/cboin/lazy/`, then re-run `Lazy update`.
+**Fix:** Identify which plugin is in the stack trace, remove or disable it in
+`lua/cboin/lazy/`, then re-run `Lazy update`.
 
 ---
 
@@ -90,7 +99,9 @@ attempt to call method 'range' (a nil value)
 
 Often triggered on a specific filetype (e.g. opening a `.md` file).
 
-**Cause:** Neovim updated and the new treesitter ABI doesn't match the compiled parser `.so` files. `TSUpdate` checks commit hashes only — it won't recompile a parser that's already at the right commit but built against an old ABI.
+**Cause:** Neovim updated and the new treesitter ABI doesn't match the compiled
+parser `.so` files. `TSUpdate` checks commit hashes only — it won't recompile a
+parser that's already at the right commit but built against an old ABI.
 
 **Fix — try TSUpdate first:**
 
@@ -105,17 +116,22 @@ nvim --headless -c "TSUpdate" -c "qa"
 nvim --headless -c "TSInstall! markdown markdown_inline" -c "qa"
 ```
 
-**If errors are widespread after a major neovim version bump (e.g. 0.11 → 0.12), reinstall all parsers:**
+**If errors are widespread after a major neovim version bump (e.g. 0.11 → 0.12),
+reinstall all parsers:**
 
 ```bash
 nvim --headless -c "TSUpdateSync" -c "qa"
 ```
 
-**If the error persists after reinstalling (confirmed on nvim 0.12 + markdown):**
+**If the error persists after reinstalling (confirmed on nvim 0.12 +
+markdown):**
 
-The crash can be triggered by nvim-lint publishing diagnostics → `vim.diagnostic.set` → redraw → treesitter highlighter hitting a nil node. This is a neovim bug, not a parser issue. Reinstalling the parser won't help.
+The crash can be triggered by nvim-lint publishing diagnostics →
+`vim.diagnostic.set` → redraw → treesitter highlighter hitting a nil node. This
+is a neovim bug, not a parser issue. Reinstalling the parser won't help.
 
-Workaround: stop treesitter entirely for the affected filetype. In `lua/cboin/lazy/treesitter.lua`:
+Workaround: stop treesitter entirely for the affected filetype. In
+`lua/cboin/lazy/treesitter.lua`:
 
 ```lua
 vim.api.nvim_create_autocmd("FileType", {
@@ -124,7 +140,8 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 ```
 
-Falls back to vim regex highlighting. Remove once neovim patches the highlighter.
+Falls back to vim regex highlighting. Remove once neovim patches the
+highlighter.
 
 ---
 
@@ -138,7 +155,8 @@ ModuleNotFoundError: No module named 'pip'
 ModuleNotFoundError: No module named 'debugpy'
 ```
 
-**Cause:** Arch and macOS update Python in place. The venv's `pip` and installed packages point to the old Python version and stop working.
+**Cause:** Arch and macOS update Python in place. The venv's `pip` and installed
+packages point to the old Python version and stop working.
 
 **Fix:** Recreate the venv:
 
@@ -152,8 +170,10 @@ python3 -m venv ~/.virtualenvs/debugpy
 
 ### Lazy UI shows conflicts after headless update
 
-**Symptom:** Opening Lazy after a headless `Lazy update` shows conflicts or dirty state.
+**Symptom:** Opening Lazy after a headless `Lazy update` shows conflicts or
+dirty state.
 
-**Cause:** `lazy-lock.json` was updated on disk by the headless run but not committed, so Lazy sees uncommitted changes.
+**Cause:** `lazy-lock.json` was updated on disk by the headless run but not
+committed, so Lazy sees uncommitted changes.
 
 **Fix:** Commit `lazy-lock.json` as described in the update procedure above.
