@@ -11,8 +11,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install selene
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          URL=$(curl -fsSL https://api.github.com/repos/Kampfkarren/selene/releases/latest \
+          URL=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/Kampfkarren/selene/releases/latest \
             | python3 -c "import json,sys; print(next(a['browser_download_url'] for a in json.load(sys.stdin)['assets'] if 'linux' in a['name'] and 'light' not in a['name']))")
           curl -fsSL "$URL" -o /tmp/selene.zip
           mkdir -p ~/.local/bin
