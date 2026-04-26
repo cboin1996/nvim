@@ -34,8 +34,9 @@ dev-bootstrap:
 	    echo "selene already installed ($$(selene --version))"; \
 	elif [ "$$OS" = "Linux" ]; then \
 	    mkdir -p "$$HOME/.local/bin"; \
-	    curl -fsSL "https://github.com/Kampfkarren/selene/releases/latest/download/selene-linux.zip" \
-	        -o /tmp/selene.zip; \
+	    URL=$$(curl -fsSL https://api.github.com/repos/Kampfkarren/selene/releases/latest \
+	        | python3 -c "import json,sys; print(next(a['browser_download_url'] for a in json.load(sys.stdin)['assets'] if 'linux' in a['name'] and 'light' not in a['name']))"); \
+	    curl -fsSL "$$URL" -o /tmp/selene.zip; \
 	    unzip -o /tmp/selene.zip selene -d "$$HOME/.local/bin"; \
 	    chmod +x "$$HOME/.local/bin/selene"; \
 	    echo "==> selene installed"; \
